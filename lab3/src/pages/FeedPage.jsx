@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
-import usePosts from './usePosts.js';
-import PostForm from './PostForm.jsx';
-import PostItem from './PostItem.jsx';
+import usePosts from '../hooks/usePosts.js';
+import PostForm from '../components/PostForm.jsx';
+import PostItem from '../components/PostItem.jsx';
 
 const PAGE_SIZE = 10;
 
-export default function App() {
+export default function FeedPage() {
   const { posts, users, loading, error, notice, retry, addPost, deletePost } = usePosts();
   const [query, setQuery] = useState('');
   const [authorId, setAuthorId] = useState('');

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { request } from './api.js';
+import api from '../api/client.js';
 
 export default function usePosts() {
   const [posts, setPosts] = useState([]);
@@ -11,17 +11,18 @@ export default function usePosts() {
 
   useEffect(() => {
     const controller = new AbortController();
+    const requestOptions = { signal: controller.signal };
     setLoading(true);
     setError('');
 
     Promise.all([
-      request('/posts', { signal: controller.signal }),
-      request('/users', { signal: controller.signal }),
+      api.get('/posts', requestOptions),
+      api.get('/users', requestOptions),
     ])
-      .then(([loadedPosts, loadedUsers]) => {
+      .then(([postsResponse, usersResponse]) => {
         if (controller.signal.aborted) return;
-        setPosts(loadedPosts.map(post => ({ ...post, key: `server-${post.id}` })));
-        setUsers(loadedUsers);
+        setPosts(postsResponse.data.map(post => ({ ...post, key: `server-${post.id}` })));
+        setUsers(usersResponse.data);
       })
       .catch(cause => { if (!controller.signal.aborted) setError(cause.message); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
@@ -30,7 +31,7 @@ export default function usePosts() {
   }, [attempt]);
 
   async function addPost(title, body) {
-    const created = await request('/posts', { method: 'POST', data: { title, body, userId: 1 } });
+    const { data: created } = await api.post('/posts', { title, body, userId: 1 });
     // API возвращает id=101 при каждом POST. Ключи React должны быть уникальны.
     const post = { ...created, key: `local-${crypto.randomUUID()}`, isLocal: true };
     setPosts(current => [post, ...current]);
@@ -38,7 +39,7 @@ export default function usePosts() {
   }
 
   async function deletePost(post) {
-    await request(`/posts/${post.id}`, { method: 'DELETE' });
+    await api.delete(`/posts/${post.id}`);
     setPosts(current => current.filter(item => item.key !== post.key));
     setNotice(`Пост «${post.title}» удалён.`);
   }

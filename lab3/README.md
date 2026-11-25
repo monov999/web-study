@@ -1,6 +1,6 @@
 # Лабораторная работа №3 — «Лента»
 
-Простое веб-приложение на **React** с данными [JSONPlaceholder](https://jsonplaceholder.typicode.com/). Сборка и сервер разработки — **Vite**. Серверная часть, регистрация и ключ API не нужны.
+Простое веб-приложение на **React** с данными [JSONPlaceholder](https://jsonplaceholder.typicode.com/). Для HTTP-запросов используется **Axios**, для сборки и запуска — **Vite**. Серверная часть, регистрация и ключ API не нужны.
 
 ## Возможности
 
@@ -49,18 +49,22 @@ lab3/
 ├── public/
 │   └── favicon.svg
 └── src/
-    ├── main.jsx       — монтирование React-приложения
-    ├── App.jsx        — интерфейс, поиск, фильтры и страницы
-    ├── usePosts.js    — загрузка и изменение состояния постов
-    ├── PostForm.jsx   — управляемая форма нового поста
-    ├── PostItem.jsx   — один пост и его удаление
-    ├── api.js         — fetch, HTTP-ошибки, отмена и таймаут
-    └── style.css      — стили и адаптация для мобильных экранов
+    ├── main.jsx                 — монтирование React-приложения
+    ├── pages/
+    │   └── FeedPage.jsx         — лента, поиск, фильтры и пагинация
+    ├── components/
+    │   ├── PostForm.jsx         — управляемая форма нового поста
+    │   └── PostItem.jsx         — карточка поста и его удаление
+    ├── hooks/
+    │   └── usePosts.js          — запросы и состояние постов
+    ├── api/
+    │   └── client.js            — клиент Axios, таймаут и сообщения об ошибках
+    └── style.css                — стили и адаптация для мобильных экранов
 ```
 
 ## Использование API
 
-Базовый адрес: `https://jsonplaceholder.typicode.com`.
+В `api/client.js` создаётся экземпляр Axios с базовым адресом `https://jsonplaceholder.typicode.com` и таймаутом 15 секунд. Хук `usePosts` вызывает методы `get`, `post` и `delete`, а данные берёт из `response.data`.
 
 | Метод | Путь | Назначение |
 |---|---|---|
@@ -83,7 +87,7 @@ lab3/
 
 ## Как работает React
 
-1. `main.jsx` создаёт корень через `createRoot` и отображает `App`.
+1. `main.jsx` создаёт корень через `createRoot` и отображает `FeedPage`.
 2. Хук `usePosts` загружает данные в `useEffect`. При размонтировании незавершённые запросы отменяются через `AbortController`.
 3. `useState` хранит посты, авторов, значения формы, фильтры и состояние запросов. JSX описывает интерфейс на основе этих данных.
 4. `PostForm` получает функцию `onAdd` через props. При отправке формы вызывается POST-запрос. После успешного ответа новый пост добавляется в начало массива, форма очищается, фильтры сбрасываются, чтобы пост был виден.
@@ -104,4 +108,4 @@ JSONPlaceholder возвращает одинаковый `id = 101` для не
 6. Перезагрузите страницу: восстановится исходный список API.
 7. Отключите сеть и перезагрузите страницу: появится сообщение и кнопка повтора. После восстановления сети нажмите «Попробовать снова».
 
-Документация: [JSONPlaceholder](https://jsonplaceholder.typicode.com/), [React — эффекты](https://react.dev/learn/synchronizing-with-effects), [Vite](https://vite.dev/guide/).
+Документация: [JSONPlaceholder](https://jsonplaceholder.typicode.com/), [React — эффекты](https://react.dev/learn/synchronizing-with-effects), [Axios](https://axios.rest/pages/advanced/create-an-instance), [Vite](https://vite.dev/guide/).
