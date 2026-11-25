@@ -63,6 +63,7 @@ function element(tag, className, text) {
 
 // Данные API и пользователя вставляются через textContent, а не как HTML.
 function createPostCard(post) {
+  const item = document.createElement('li');
   const article = element('article', 'post-card');
   const meta = element('div', 'post-meta');
   meta.append(
@@ -82,7 +83,8 @@ function createPostCard(post) {
   remove.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5M14 11v5"/></svg><span>Удалить</span>';
   footer.append(source, remove);
   article.append(meta, heading, body, footer);
-  return article;
+  item.append(article);
+  return item;
 }
 
 function renderPosts() {
@@ -110,7 +112,7 @@ async function loadPosts() {
   setBusy(true);
   get('loadError').hidden = true;
   get('emptyState').hidden = true;
-  get('loading').hidden = state.posts.length > 0;
+  get('feedStatus').classList.add('is-loading');
   get('feedStatus').textContent = 'Загружаем заметки…';
   try {
     const posts = await ajax('GET', `/posts?_limit=${POST_LIMIT}`);
@@ -125,7 +127,7 @@ async function loadPosts() {
     get('loadError').hidden = false;
     get('feedStatus').textContent = state.posts.length ? 'Не удалось обновить. Предыдущие заметки сохранены в ленте.' : 'Ошибка загрузки';
   } finally {
-    get('loading').hidden = true;
+    get('feedStatus').classList.remove('is-loading');
     setBusy(false);
   }
 }

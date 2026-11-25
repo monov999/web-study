@@ -31,13 +31,11 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .header-inner { min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-size: 24px; font-weight: 700; letter-spacing: -.8px; }
 .brand-mark { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; color: var(--surface); background: var(--green); font: 700 28px/1 Georgia, serif; padding-bottom: 4px; }
-.brand-dot { color: var(--green); }
 .lab-label { color: var(--muted); font-size: 13px; }
 .lab-label b { margin-left: 8px; font-weight: 600; color: var(--ink); }
 .page-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 48px 40px; }
 .eyebrow { color: var(--green); font-size: 11px; letter-spacing: 1.6px; font-weight: 650; text-transform: uppercase; margin: 0 0 12px; }
 h1 { font-size: clamp(30px, 3.2vw, 42px); line-height: 1.2; font-weight: 650; letter-spacing: -1.5px; margin: 0 0 12px; }
-h1 span { color: var(--green); }
 .page-description { margin: 0; color: var(--muted); }
 .api-link { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; text-decoration: none; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; background: var(--surface); }
 .api-link:hover { border-color: var(--green); }
@@ -78,8 +76,9 @@ textarea { display: block; resize: vertical; min-height: 152px; max-height: 440p
 .search-box { position: relative; }
 .search-box svg { position: absolute; left: 16px; top: 14px; color: var(--muted); width: 18px; height: 18px; pointer-events: none; }
 .search-box input { min-height: 46px; padding-left: 44px; background: transparent; }
-.feed-status { min-height: 20px; margin: 12px 0 16px; color: var(--muted); font-size: 11px; }
-.posts-list { display: grid; gap: 16px; }
+.feed-status { display: flex; align-items: center; gap: 8px; min-height: 20px; margin: 12px 0 16px; color: var(--muted); font-size: 11px; }
+.feed-status.is-loading::before { content: ""; width: 12px; height: 12px; flex-shrink: 0; border: 2px solid var(--line); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; }
+.posts-list { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
 .post-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; overflow-wrap: anywhere; }
 .post-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 10px; margin-bottom: 12px; }
 .post-index { color: var(--green); font-weight: 650; letter-spacing: 1px; }
@@ -92,19 +91,16 @@ textarea { display: block; resize: vertical; min-height: 152px; max-height: 440p
 .delete-button { border: 0; padding: 4px 8px; min-height: 32px; display: inline-flex; align-items: center; gap: 6px; background: transparent; color: var(--muted); font-size: 11px; border-radius: 4px; }
 .delete-button svg { width: 14px; height: 14px; }
 .delete-button:hover:not(:disabled) { color: var(--error); background: var(--error-soft); }
-.loading-placeholder { display: grid; gap: 16px; }
-.loading-placeholder div { height: 208px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--green-soft); animation: pulse 1.4s ease-in-out infinite alternate; }
 .empty-state { text-align: center; padding: 48px 24px; border: 1px dashed var(--line); border-radius: var(--radius); }
 .empty-symbol { display: block; color: var(--green); font: 48px/1 Georgia, serif; margin-bottom: 16px; }
 .empty-state h3, .error-state h3 { font-size: 18px; margin: 0 0 8px; }
 .empty-state p, .error-state p { font-size: 13px; margin: 0 0 16px; color: var(--muted); }
 .error-state { padding: 24px; border: 1px solid #e2bfb9; border-radius: var(--radius); background: var(--error-soft); color: var(--error); margin-bottom: 16px; }
 .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); margin-top: 48px; padding-block: 24px; font-size: 10px; color: var(--muted); }
-.footer-divider { margin-inline: 12px; }
 .notification { position: fixed; right: 24px; bottom: 24px; z-index: 5; width: min(400px, calc(100% - 32px)); padding: 0; border-radius: 8px; font-size: 13px; color: white; background: var(--green); box-shadow: 0 4px 24px #202f271a; }
 .notification:not(:empty) { padding: 16px 20px; }
 .notification.is-error { background: var(--error); }
-@keyframes pulse { to { opacity: .45; } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 @media (max-width: 1024px) {
   .workspace { grid-template-columns: 288px minmax(0, 1fr); gap: 24px; }
